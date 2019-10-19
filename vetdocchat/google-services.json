@@ -1,0 +1,114 @@
+{
+  "project_info": {
+    "project_number": "676934758944",
+    "firebase_url": "https://vetdoc-39fcf.firebaseio.com",
+    "project_id": "vetdoc-39fcf",
+    "storage_bucket": "vetdoc-39fcf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:676934758944:android:5004b110cdf78a2ba50245",
+        "android_client_info": {
+          "package_name": "com.supportingchatapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "676934758944-gfukpf6plu22g8pc4f35ld64v1u64nef.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBwdmORNSWyANnSNvEWPVqWSgeIyM4fsmQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "676934758944-gfukpf6plu22g8pc4f35ld64v1u64nef.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:676934758944:android:0668de1d1a189b3ca50245",
+        "android_client_info": {
+          "package_name": "com.vetdocchat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "676934758944-b0sg5na4gub8fihqbnou793nehpboffh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.vetdocchat",
+            "certificate_hash": "36b2d19628200cf66e653424160f79e25237c501"
+          }
+        },
+        {
+          "client_id": "676934758944-gfukpf6plu22g8pc4f35ld64v1u64nef.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBwdmORNSWyANnSNvEWPVqWSgeIyM4fsmQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "676934758944-gfukpf6plu22g8pc4f35ld64v1u64nef.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:676934758944:android:adfceae82b30aab1a50245",
+        "android_client_info": {
+          "package_name": "com.wd.waleedpcc.vetdoctor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "676934758944-ocnvaufl0sfna7a7sbvpudacj4qrntvt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.wd.waleedpcc.vetdoctor",
+            "certificate_hash": "36b2d19628200cf66e653424160f79e25237c501"
+          }
+        },
+        {
+          "client_id": "676934758944-gfukpf6plu22g8pc4f35ld64v1u64nef.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBwdmORNSWyANnSNvEWPVqWSgeIyM4fsmQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "676934758944-gfukpf6plu22g8pc4f35ld64v1u64nef.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
