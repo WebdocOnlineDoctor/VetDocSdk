@@ -13,15 +13,17 @@ import java.util.HashMap;
 public class VetDocChat
 {
 
-    public static DatabaseReference chatReference;
+
+    /*public static DatabaseReference chatReference;
 
     public VetDocChat()
     {
         chatReference = FirebaseDatabase.getInstance().getReference();
-    }
+    }*/
 
     public static String sendMessage(String appName, String msg, String sender, String receiver, String msgType  )
     {
+        DatabaseReference chatReference = FirebaseDatabase.getInstance().getReference();
         String messageID = chatReference.push().getKey();
         HashMap<String, Object> hashMap = new HashMap<String, Object>();
         hashMap.put("message", msg);

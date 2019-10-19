@@ -12,7 +12,10 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
+        /*VetDocChat vetDocChat = new VetDocChat();
+        vetDocChat.sendMessage("vetDoctor", "Test Meesage", "waleed", "saif", "text");*/
 
-        VetDocChat.sendMessage();
+        VetDocChat.sendMessage("abc", "Test Meesage", "waleed", "saif", "text");
+
     }
 }
