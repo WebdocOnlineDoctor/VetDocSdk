@@ -79,7 +79,7 @@ public class VetDocChat
     {
         final List<MessageDataModel> msgData = new ArrayList();
         DatabaseReference chatReference = FirebaseDatabase.getInstance().getReference();
-        final VetDocChatInterface listener = (VetDocChatInterface) ctx;
+        final VetDocChatInterface listener = (VetDocChatInterface) ctx.getApplicationContext();
         String chatKey= "";
         if(AppName.equalsIgnoreCase("vetDoctor")) {
             chatKey = personalEmail+"_"+chatUserEmail;
