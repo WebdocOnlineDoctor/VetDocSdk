@@ -26,6 +26,7 @@ import java.util.List;
 public class VetDocChat
 {
 
+    static Context ctx;
 
     /*public static DatabaseReference chatReference;
 
@@ -75,11 +76,12 @@ public class VetDocChat
         return response[0];
     }
 
-    public static void getMessage(Context ctx, final String AppName, final String personalEmail, final String chatUserEmail)
+    public static void getMessage(Context context, final String AppName, final String personalEmail, final String chatUserEmail)
     {
+        ctx = context;
         final List<MessageDataModel> msgData = new ArrayList();
         DatabaseReference chatReference = FirebaseDatabase.getInstance().getReference();
-        final VetDocChatInterface listener = (VetDocChatInterface) ctx.getApplicationContext();
+        final VetDocChatInterface listener = (VetDocChatInterface) ctx;
         String chatKey= "";
         if(AppName.equalsIgnoreCase("vetDoctor")) {
             chatKey = personalEmail+"_"+chatUserEmail;
@@ -87,8 +89,6 @@ public class VetDocChat
         else {
             chatKey = chatUserEmail+"_"+personalEmail;
         }
-
-
 
         final String finalChatKey = chatKey;
         chatReference.child("Messages").child(AppName).child(chatKey).addValueEventListener(new ValueEventListener() {
