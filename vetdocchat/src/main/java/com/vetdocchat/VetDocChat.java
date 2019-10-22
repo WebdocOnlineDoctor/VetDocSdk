@@ -1,6 +1,9 @@
 package com.vetdocchat;
 
+import android.app.Activity;
 import android.support.annotation.NonNull;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -71,10 +74,11 @@ public class VetDocChat
         return response[0];
     }
 
-    public static List<MessageDataModel> getMessage(final String AppName, final String personalEmail, final String chatUserEmail)
+    public static void getMessage(Activity ctx, final String AppName, final String personalEmail, final String chatUserEmail)
     {
         final List<MessageDataModel> msgData = new ArrayList();
         DatabaseReference chatReference = FirebaseDatabase.getInstance().getReference();
+        final VetDocChatInterface listener = (VetDocChatInterface) ctx;
         String chatKey= "";
         if(AppName.equalsIgnoreCase("vetDoctor")) {
             chatKey = personalEmail+"_"+chatUserEmail;
@@ -82,6 +86,8 @@ public class VetDocChat
         else {
             chatKey = chatUserEmail+"_"+personalEmail;
         }
+
+
 
         final String finalChatKey = chatKey;
         chatReference.child("Messages").child(AppName).child(chatKey).addValueEventListener(new ValueEventListener() {
@@ -97,19 +103,21 @@ public class VetDocChat
                     msg.setType(snapshot.child("type").getValue().toString());
                     msg.setMessageStatus(snapshot.child("MessageStatus").getValue().toString());
                     msgData.add(msg);
+
+                    /*Log.e("MESSAGE---",msg.getMessage());*/
                 }
                 seenStatus(AppName, personalEmail, chatUserEmail, finalChatKey);
+                listener.getMessagesResponse(msgData);
+
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
-
-
         });
 
-        return msgData;
+
     }
 
     public static String changeStatus()
