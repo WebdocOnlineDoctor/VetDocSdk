@@ -1,6 +1,7 @@
 package com.vetdocchat;
 
 import android.app.Activity;
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
@@ -74,7 +75,7 @@ public class VetDocChat
         return response[0];
     }
 
-    public static void getMessage(Activity ctx, final String AppName, final String personalEmail, final String chatUserEmail)
+    public static void getMessage(Context ctx, final String AppName, final String personalEmail, final String chatUserEmail)
     {
         final List<MessageDataModel> msgData = new ArrayList();
         DatabaseReference chatReference = FirebaseDatabase.getInstance().getReference();
