@@ -44,14 +44,14 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private void sendOreoNotification(RemoteMessage remoteMessage) {
         String user = remoteMessage.getData().get("user");
-        String icon = remoteMessage.getData().get("icon");
+        //String icon = remoteMessage.getData().get("icon");
         String title = remoteMessage.getData().get("title");
         String body = remoteMessage.getData().get("body");
         user = user.replace("@", "");
         RemoteMessage.Notification notification = remoteMessage.getNotification();
         Uri defaultSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         OreoNotification oreoNotification = new OreoNotification(this);
-        Notification.Builder builder = oreoNotification.getOreoNotification(title, body, defaultSound, icon);
+        Notification.Builder builder = oreoNotification.getOreoNotification(title, body, defaultSound);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             oreoNotification.getManager().notify((int) System.currentTimeMillis(), builder.build());
         }
@@ -59,7 +59,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private void sendNotification(RemoteMessage remoteMessage) {
         String user = remoteMessage.getData().get("user");
-        String icon = remoteMessage.getData().get("icon");
+        //String icon = remoteMessage.getData().get("icon");
         String title = remoteMessage.getData().get("title");
         String body = remoteMessage.getData().get("body");
         RemoteMessage.Notification notification = remoteMessage.getNotification();

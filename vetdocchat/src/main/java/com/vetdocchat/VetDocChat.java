@@ -35,7 +35,7 @@ public class VetDocChat {
 
     static Context ctx;
 
-    public String sendMessage(final String appName, final String msg, final String sender, final String receiver, String msgType) {
+    public static String sendMessage(final String appName, final String msg, final String sender, final String receiver, String msgType) {
         final boolean[] notify = {false};
         notify[0] = true;
         String UsersChatKey = "";
@@ -185,7 +185,7 @@ public class VetDocChat {
         });
     }
 
-    private void sendNotification(final String AppName, final String sender, final String receiver, final String msg) {
+    private static void sendNotification(final String AppName, final String sender, final String receiver, final String msg) {
         DatabaseReference tokens = FirebaseDatabase.getInstance().getReference("Tokens");
         Query query = tokens.orderByKey().equalTo(receiver);
         query.addValueEventListener(new ValueEventListener() {
