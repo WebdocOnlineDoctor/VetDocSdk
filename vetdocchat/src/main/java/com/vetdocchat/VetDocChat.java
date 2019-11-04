@@ -226,7 +226,7 @@ public class VetDocChat {
         });
     }
 
-    private static void updateToken(String AppName, String Userid, String token){
+    public static void updateToken(String AppName, String Userid, String token){
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Tokens");
         Token token1 = new Token(token);
         reference.child(AppName).child(Userid).setValue(token1);
