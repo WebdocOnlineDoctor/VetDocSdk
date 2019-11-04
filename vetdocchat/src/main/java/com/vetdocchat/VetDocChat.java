@@ -35,7 +35,7 @@ public class VetDocChat {
 
     static Context ctx;
 
-    public String sendMessage(final String appName, final String msg, final String sender, final String receiver, String msgType, final int messageIcon) {
+    public String sendMessage(final String appName, final String msg, final String sender, final String receiver, String msgType) {
         final boolean[] notify = {false};
         notify[0] = true;
         String UsersChatKey = "";
@@ -65,7 +65,7 @@ public class VetDocChat {
                     response[0] = "success";
 
                     if (notify[0]) {
-                        sendNotification(appName, sender, receiver, msg, messageIcon);
+                        sendNotification(appName, sender, receiver, msg);
                     }
                     notify[0] = false;
 
@@ -185,7 +185,7 @@ public class VetDocChat {
         });
     }
 
-    private void sendNotification(final String AppName, final String sender, final String receiver, final String msg, final int msgIcon) {
+    private void sendNotification(final String AppName, final String sender, final String receiver, final String msg) {
         DatabaseReference tokens = FirebaseDatabase.getInstance().getReference("Tokens");
         Query query = tokens.orderByKey().equalTo(receiver);
         query.addValueEventListener(new ValueEventListener() {
@@ -197,7 +197,7 @@ public class VetDocChat {
 
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Token token = snapshot.getValue(Token.class);
-                    Data data = new Data(sender, sender + ": " + msg, AppName, "Sent", msgIcon);
+                    Data data = new Data(sender, sender + ": " + msg, AppName, "Sent");
 
                     Sender sender = new Sender(data, token.getToken());
                     apiService.sendNotification(sender)

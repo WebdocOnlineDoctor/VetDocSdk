@@ -6,7 +6,6 @@ package com.vetdocchat.NotificationManager;
 
 public class Data {
     private String user;
-    private int icon;
     private String body;
     private String title;
     private String sent;
@@ -14,9 +13,8 @@ public class Data {
     public Data() {
     }
 
-    public Data(String user, String body, String title, String sent, int icon) {
-            this.user = user;
-        this.icon = icon;
+    public Data(String user, String body, String title, String sent) {
+        this.user = user;
         this.body = body;
         this.title = title;
         this.sent = sent;
@@ -28,14 +26,6 @@ public class Data {
 
     public void setUser(String user) {
         this.user = user;
-    }
-
-    public int getIcon() {
-        return icon;
-    }
-
-    public void setIcon(int icon) {
-        this.icon = icon;
     }
 
     public String getBody() {
