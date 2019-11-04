@@ -10,4 +10,12 @@ public interface VetDocChatInterface {
 
     public void getMessagesResponse(List<MessageDataModel> msgList);
 
+    public void onUserStatusChangedResponse(String response);
+
+    public void onChangeUserStatusResponse(String status, String lastSeen);
+
+    public void onMessageSentResponse(String Response);
+
+
+
 }
