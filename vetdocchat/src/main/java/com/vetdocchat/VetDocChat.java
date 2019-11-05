@@ -213,11 +213,9 @@ public class VetDocChat {
 
                 APIService apiService;
                 apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
-
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Token token = snapshot.getValue(Token.class);
                     Data data = new Data(sender, sender + ": " + msg, AppName, "Sent");
-
                     Sender sender = new Sender(data, token.getToken());
                     apiService.sendNotification(sender)
                             .enqueue(new Callback<MyResponse>() {

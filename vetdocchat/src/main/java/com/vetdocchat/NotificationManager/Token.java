@@ -5,20 +5,20 @@ package com.vetdocchat.NotificationManager;
  */
 
 public class Token {
-    private String UserToken;
+    private String token;
 
     public Token() {
     }
 
     public Token(String token) {
-        this.UserToken = token;
+        this.token = token;
     }
 
     public String getToken() {
-        return UserToken;
+        return token;
     }
 
     public void setToken(String token) {
-        this.UserToken = token;
+        this.token = token;
     }
 }
