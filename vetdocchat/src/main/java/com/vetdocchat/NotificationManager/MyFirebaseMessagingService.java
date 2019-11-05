@@ -28,8 +28,7 @@ import static android.content.ContentValues.TAG;
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private int MY_PERMISSION = 1000;
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
+    
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
