@@ -27,8 +27,6 @@ import static android.content.ContentValues.TAG;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
-    private int MY_PERMISSION = 1000;
-
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -38,8 +36,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         }
 
     }
-
-
+    
 
     private void sendOreoNotification(RemoteMessage remoteMessage) {
         String user = remoteMessage.getData().get("user");
