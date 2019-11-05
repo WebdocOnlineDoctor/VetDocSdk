@@ -34,7 +34,7 @@ import retrofit2.Response;
 
 public class VetDocChat {
 
-    static Context ctx;
+    //static Context ctx;
 
     public static String sendMessage(final String appName, final String msg, final String sender, final String receiver, String msgType) {
         final boolean[] notify = {false};
@@ -82,8 +82,7 @@ public class VetDocChat {
         return response[0];
     }
 
-    public static void getMessage(Context context, final String AppName, final String personalEmail, final String chatUserEmail) {
-        ctx = context;
+    public static void getMessage(Context ctx, final String AppName, final String personalEmail, final String chatUserEmail) {
         final List<MessageDataModel> msgData = new ArrayList();
         DatabaseReference chatReference = FirebaseDatabase.getInstance().getReference();
         final VetDocChatInterface listener = (VetDocChatInterface) ctx;
@@ -119,7 +118,7 @@ public class VetDocChat {
         });
     }
 
-    public static String changeStatus(String AppName, String UserId, String status) {
+    public static String changeStatus(Context ctx, String AppName, String UserId, String status) {
         final VetDocChatInterface listener = (VetDocChatInterface) ctx;
         final String[] response = {""};
         DatabaseReference dbReference = FirebaseDatabase.getInstance().getReference().child("Users").child(AppName).child(UserId);
@@ -142,7 +141,7 @@ public class VetDocChat {
         return response[0];
     }
 
-    public static void checkStatus(String AppName, String UserId) {
+    public static void checkStatus(Context ctx, String AppName, String UserId) {
         final VetDocChatInterface listener = (VetDocChatInterface) ctx;
         DatabaseReference dbReference = FirebaseDatabase.getInstance().getReference();
         dbReference.child("Users").child(AppName).child(UserId).addValueEventListener(new ValueEventListener() {
