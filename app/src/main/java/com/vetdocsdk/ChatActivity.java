@@ -19,11 +19,11 @@ public class ChatActivity extends AppCompatActivity  implements VetDocChatInterf
         setContentView(R.layout.activity_chat);
         DatabaseReference dbReference;
 
-        VetDocChat.getMessage(this, "SupportChatApp", "waleed@supportchatappcom", "drkhalid@vetdoctorcompk");
+        //VetDocChat.getMessage(this, "SupportChatApp", "waleed@supportchatappcom", "drkhalid@vetdoctorcompk");
 
         /* Checking status of other user */
 
-        VetDocChat.checkStatus("VetDoc", "drzain@vetdoctorcompk");
+        //VetDocChat.checkStatus("VetDoc", "drzain@vetdoctorcompk");
 
         /*VetDocChat vetDocChat = new VetDocChat();
 
@@ -42,13 +42,13 @@ public class ChatActivity extends AppCompatActivity  implements VetDocChatInterf
     @Override
     protected void onResume() {
         super.onResume();
-        VetDocChat.changeStatus("SupportChatApp", "waleed@supportchatappcom", "online");
+        //VetDocChat.changeStatus("SupportChatApp", "waleed@supportchatappcom", "online");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        VetDocChat.changeStatus("SupportChatApp", "waleed@supportchatappcom", "offline");
+        //VetDocChat.changeStatus("SupportChatApp", "waleed@supportchatappcom", "offline");
     }
 
     @Override

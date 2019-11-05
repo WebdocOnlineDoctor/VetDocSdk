@@ -21,6 +21,7 @@ import com.vetdocchat.NotificationManager.Sender;
 import com.vetdocchat.NotificationManager.Token;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -54,11 +55,20 @@ public class VetDocChat {
         HashMap<String, Object> chat_hashMap = new HashMap<String, Object>();
         chat_hashMap.put("chat", "true");
         chatReference.child("Chat").child(receiver).child(appName).child(sender).updateChildren(chat_hashMap);
-        if (appName.equalsIgnoreCase("vetDoctor")) {
+
+
+        ArrayList TwoChattingUsersID = new ArrayList<>();
+        TwoChattingUsersID.add(sender);
+        TwoChattingUsersID.add(receiver);
+        Collections.sort(TwoChattingUsersID);
+
+        UsersChatKey = TwoChattingUsersID.get(0)+"_"+TwoChattingUsersID.get(1);
+
+        /*if (appName.equalsIgnoreCase("vetDoctor")) {
             UsersChatKey = sender + "_" + receiver;
         } else {
             UsersChatKey = receiver + "_" + sender;
-        }
+        }*/
         chatReference.child("Messages").child(appName).child(UsersChatKey).child(messageID).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
@@ -87,11 +97,20 @@ public class VetDocChat {
         DatabaseReference chatReference = FirebaseDatabase.getInstance().getReference();
         final VetDocChatInterface listener = (VetDocChatInterface) ctx;
         String chatKey = "";
-        if (AppName.equalsIgnoreCase("vetDoctor")) {
+
+        ArrayList TwoChattingUsersID = new ArrayList<>();
+        TwoChattingUsersID.add(personalEmail);
+        TwoChattingUsersID.add(chatUserEmail);
+        Collections.sort(TwoChattingUsersID);
+
+        chatKey = TwoChattingUsersID.get(0)+"_"+TwoChattingUsersID.get(1);
+
+
+        /*if (AppName.equalsIgnoreCase("vetDoctor")) {
             chatKey = personalEmail + "_" + chatUserEmail;
         } else {
             chatKey = chatUserEmail + "_" + personalEmail;
-        }
+        }*/
         final String finalChatKey = chatKey;
         chatReference.child("Messages").child(AppName).child(chatKey).addValueEventListener(new ValueEventListener() {
             @Override
