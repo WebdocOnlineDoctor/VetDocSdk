@@ -36,7 +36,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         }
 
     }
-    
+
 
     private void sendOreoNotification(RemoteMessage remoteMessage) {
         String user = remoteMessage.getData().get("user");
@@ -52,6 +52,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             oreoNotification.getManager().notify((int) System.currentTimeMillis(), builder.build());
         }
     }
+
+    
 
     private void sendNotification(RemoteMessage remoteMessage) {
         String user = remoteMessage.getData().get("user");
