@@ -19,7 +19,10 @@ import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.vetdocchat.R;
+
 import static android.content.ContentValues.TAG;
+import static com.vetdocchat.R.drawable.ic_notification;
 
 /**
  * Created by Waleed on 16/08/2019.
@@ -48,12 +51,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Uri defaultSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         OreoNotification oreoNotification = new OreoNotification(this);
         Notification.Builder builder = oreoNotification.getOreoNotification(title, body, defaultSound);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            oreoNotification.getManager().notify((int) System.currentTimeMillis(), builder.build());
-        }
+        oreoNotification.getManager().notify((int) System.currentTimeMillis(), builder.build());
     }
 
-    
+
 
     private void sendNotification(RemoteMessage remoteMessage) {
         String user = remoteMessage.getData().get("user");
@@ -63,7 +64,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         RemoteMessage.Notification notification = remoteMessage.getNotification();
         Uri defaultSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
-                //.setSmallIcon(Integer.parseInt(icon))
+                .setSmallIcon(ic_notification)
                 .setContentTitle(title)
                 .setContentText(body)
                 .setAutoCancel(true)

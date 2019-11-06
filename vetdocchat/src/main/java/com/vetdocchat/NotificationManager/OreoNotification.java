@@ -10,6 +10,8 @@ import android.content.ContextWrapper;
 import android.net.Uri;
 import android.os.Build;
 
+import com.vetdocchat.R;
+
 /**
  * Created by Admin on 9/7/2019.
  */
@@ -55,7 +57,7 @@ public class OreoNotification extends ContextWrapper {
                 //.setContentIntent(pendingIntent)
                 .setContentTitle(title)
                 .setContentText(body)
-                //.setSmallIcon(Integer.parseInt(icon))
+                .setSmallIcon(R.drawable.ic_notification)
                 .setSound(soundUri)
                 .setAutoCancel(true);
     }

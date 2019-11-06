@@ -19,6 +19,12 @@ public class ChatActivity extends AppCompatActivity  implements VetDocChatInterf
         setContentView(R.layout.activity_chat);
         DatabaseReference dbReference;
 
+
+        VetDocChat.updateToken("SupportChatApp", "waleed@supportchatappcom");
+
+        //VetDocChat.sendMessage("SupportChatApp", "Test Msg", "drnadeem@vetdoctorcompk", "waleed@supportchatappcom", "text" );
+
+
         //VetDocChat.getMessage(this, "SupportChatApp", "waleed@supportchatappcom", "drkhalid@vetdoctorcompk");
 
         /* Checking status of other user */
