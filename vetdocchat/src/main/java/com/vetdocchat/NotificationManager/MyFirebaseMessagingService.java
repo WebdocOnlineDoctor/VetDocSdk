@@ -37,7 +37,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         } else {
             sendNotification(remoteMessage);
         }
-
     }
 
 

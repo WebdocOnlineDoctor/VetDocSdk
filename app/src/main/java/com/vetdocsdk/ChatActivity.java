@@ -20,7 +20,7 @@ public class ChatActivity extends AppCompatActivity  implements VetDocChatInterf
         DatabaseReference dbReference;
 
 
-        VetDocChat.updateToken("SupportChatApp", "waleed@supportchatappcom");
+        VetDocChat.updateToken("VetDoc", "drnadeem@vetdoctorcompk");
 
         //VetDocChat.sendMessage("SupportChatApp", "Test Msg", "drnadeem@vetdoctorcompk", "waleed@supportchatappcom", "text" );
 

@@ -37,7 +37,7 @@ public class VetDocChat {
 
     //static Context ctx;
 
-    public static String sendMessage(final String appName, final String msg, final String sender, final String receiver, String msgType) {
+    public static String sendMessage(final String senderAppName, final String receiverAppName, final String msg, final String sender, final String receiver, String msgType) {
         final boolean[] notify = {false};
         notify[0] = true;
         String UsersChatKey = "";
@@ -54,7 +54,7 @@ public class VetDocChat {
         hashMap.put("MessageStatus", "sent");
         HashMap<String, Object> chat_hashMap = new HashMap<String, Object>();
         chat_hashMap.put("chat", "true");
-        chatReference.child("Chat").child(receiver).child(appName).child(sender).updateChildren(chat_hashMap);
+        chatReference.child("Chat").child(receiver).child(senderAppName).child(sender).updateChildren(chat_hashMap);
 
 
         ArrayList TwoChattingUsersID = new ArrayList<>();
@@ -69,14 +69,14 @@ public class VetDocChat {
         } else {
             UsersChatKey = receiver + "_" + sender;
         }*/
-        chatReference.child("Messages").child(appName).child(UsersChatKey).child(messageID).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+        chatReference.child("Messages").child(senderAppName).child(UsersChatKey).child(messageID).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
                     response[0] = "success";
 
                     if (notify[0]) {
-                        sendNotification(appName, sender, receiver, msg);
+                        sendNotification(senderAppName, receiverAppName, sender, receiver, msg);
                     }
                     notify[0] = false;
 
@@ -204,8 +204,8 @@ public class VetDocChat {
         });
     }
 
-    private static void sendNotification(final String AppName, final String sender, final String receiver, final String msg) {
-        DatabaseReference tokens = FirebaseDatabase.getInstance().getReference("Tokens").child(AppName);
+    private static void sendNotification(final String senderAppName, final String receiverAppName, final String sender, final String receiver, final String msg) {
+        DatabaseReference tokens = FirebaseDatabase.getInstance().getReference("Tokens").child(receiverAppName);
         Query query = tokens.orderByKey().equalTo(receiver);
         query.addValueEventListener(new ValueEventListener() {
             @Override
@@ -215,7 +215,7 @@ public class VetDocChat {
                 apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Token token = snapshot.getValue(Token.class);
-                    Data data = new Data(sender, sender + ": " + msg, AppName, "Sent");
+                    Data data = new Data(sender, sender + ": " + msg, senderAppName, "Sent");
                     Sender sender = new Sender(data, token.getToken());
                     apiService.sendNotification(sender)
                             .enqueue(new Callback<MyResponse>() {
@@ -230,7 +230,6 @@ public class VetDocChat {
 
                                 @Override
                                 public void onFailure(Call<MyResponse> call, Throwable throwable) {
-
                                 }
                             });
                 }
