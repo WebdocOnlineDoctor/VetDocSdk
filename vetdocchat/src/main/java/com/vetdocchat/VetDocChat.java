@@ -1,8 +1,10 @@
 package com.vetdocchat;
 
 import android.content.Context;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
@@ -13,6 +15,11 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageTask;
+import com.google.firebase.storage.UploadTask;
+import com.google.gson.annotations.SerializedName;
 import com.vetdocchat.NotificationManager.APIService;
 import com.vetdocchat.NotificationManager.Client;
 import com.vetdocchat.NotificationManager.Data;
@@ -37,59 +44,73 @@ public class VetDocChat {
 
     //static Context ctx;
 
-    public static String sendMessage(final String senderAppName, final String receiverAppName, final String msg, final String sender, final String receiver, String msgType) {
-        final boolean[] notify = {false};
-        notify[0] = true;
-        String UsersChatKey = "";
-        final String[] response = {""};
-        DatabaseReference chatReference = FirebaseDatabase.getInstance().getReference();
-        String messageID = chatReference.push().getKey();
-        HashMap<String, Object> hashMap = new HashMap<String, Object>();
-        hashMap.put("message", msg);
-        hashMap.put("sender", sender);
-        hashMap.put("receiver", receiver);
-        hashMap.put("timestamp", ServerValue.TIMESTAMP);
-        hashMap.put("messageID", messageID);
-        hashMap.put("type", msgType);
-        hashMap.put("MessageStatus", "sent");
-        HashMap<String, Object> chat_hashMap = new HashMap<String, Object>();
-        chat_hashMap.put("chat", "true");
-        chatReference.child("Chat").child(receiver).child(senderAppName).child(sender).updateChildren(chat_hashMap);
+
+    public static void uploadFile(final String senderAppName, final String receiverAppName, final String type, final String sender, final String receiver, Uri fileUri) {
+
+        final Uri[] downloadUri = new Uri[1];
+        StorageReference filePath = null;
+        StorageTask uploadTask;
 
 
-        ArrayList TwoChattingUsersID = new ArrayList<>();
-        TwoChattingUsersID.add(sender);
-        TwoChattingUsersID.add(receiver);
-        Collections.sort(TwoChattingUsersID);
+        if (fileUri != null) {
+            //progressDialog.show();
 
-        UsersChatKey = TwoChattingUsersID.get(0)+"_"+TwoChattingUsersID.get(1);
+            DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Messages");
+            String messageID = ref.push().getKey();
 
-        /*if (appName.equalsIgnoreCase("vetDoctor")) {
-            UsersChatKey = sender + "_" + receiver;
-        } else {
-            UsersChatKey = receiver + "_" + sender;
-        }*/
-        chatReference.child("Messages").child(senderAppName).child(UsersChatKey).child(messageID).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    response[0] = "success";
+            //String name = Environment.getExternalStorageDirectory().getAbsolutePath();
 
-                    if (notify[0]) {
-                        sendNotification(senderAppName, receiverAppName, sender, receiver, msg);
-                    }
-                    notify[0] = false;
+            switch (type) {
+                case "image":
+                    filePath = FirebaseStorage.getInstance().getReference().child("Images/").child(messageID + ".jpg");
+                    break;
 
+                case "pdf":
+                    filePath = FirebaseStorage.getInstance().getReference().child("PDF Files/").child(messageID + "." + type);
+                    break;
 
-                } else {
-                    response[0] = task.getException().getMessage();
-                }
+                case "docx":
+                    filePath = FirebaseStorage.getInstance().getReference().child("Docx Files/").child(messageID + "." + type);
+                    break;
             }
-        });
+            uploadTask = filePath.putFile(fileUri);
+            final StorageReference finalFilePath = filePath;
+            Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                @Override
+                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                    if (!task.isSuccessful()) {
+                        throw task.getException();
+                    }
 
+                    // Continue with the task to get the download URL
+                    return finalFilePath.getDownloadUrl();
+                }
+            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                @Override
+                public void onComplete(@NonNull Task<Uri> task) {
+                    if (task.isSuccessful()) {
+                        downloadUri[0] = task.getResult();
+                        messageSend(senderAppName, receiverAppName, downloadUri[0].toString(), sender, receiver, type);
+                    } else {
+                        // Handle failures
+                        //Toast.makeText(MessagesActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
 
+        }
+    }
 
-        return response[0];
+    public static void sendMessage(final String senderAppName, final String receiverAppName, final String msg, final String sender, final String receiver, String msgType, Uri fileUri) {
+
+        if ((msgType.equalsIgnoreCase("image")) || (msgType.equalsIgnoreCase("pdf")) || (msgType.equalsIgnoreCase("docx")))
+        {
+            uploadFile(senderAppName, receiverAppName, sender, receiver, msgType, fileUri);
+        }
+        else if (msgType.equalsIgnoreCase("Text"))
+        {
+            messageSend(senderAppName, receiverAppName, msg, sender, receiver, msgType);
+        }
     }
 
     public static void getMessage(Context ctx, final String AppName, final String personalEmail, final String chatUserEmail) {
@@ -97,20 +118,11 @@ public class VetDocChat {
         DatabaseReference chatReference = FirebaseDatabase.getInstance().getReference();
         final VetDocChatInterface listener = (VetDocChatInterface) ctx;
         String chatKey = "";
-
         ArrayList TwoChattingUsersID = new ArrayList<>();
         TwoChattingUsersID.add(personalEmail);
         TwoChattingUsersID.add(chatUserEmail);
         Collections.sort(TwoChattingUsersID);
-
-        chatKey = TwoChattingUsersID.get(0)+"_"+TwoChattingUsersID.get(1);
-
-
-        /*if (AppName.equalsIgnoreCase("vetDoctor")) {
-            chatKey = personalEmail + "_" + chatUserEmail;
-        } else {
-            chatKey = chatUserEmail + "_" + personalEmail;
-        }*/
+        chatKey = TwoChattingUsersID.get(0) + "_" + TwoChattingUsersID.get(1);
         final String finalChatKey = chatKey;
         chatReference.child("Messages").child(AppName).child(chatKey).addValueEventListener(new ValueEventListener() {
             @Override
@@ -125,7 +137,6 @@ public class VetDocChat {
                     msg.setType(snapshot.child("type").getValue().toString());
                     msg.setMessageStatus(snapshot.child("MessageStatus").getValue().toString());
                     msgData.add(msg);
-                    /*Log.e("MESSAGE---",msg.getMessage());*/
                 }
                 seenStatus(AppName, personalEmail, chatUserEmail, finalChatKey);
                 listener.getMessagesResponse(msgData);
@@ -198,6 +209,7 @@ public class VetDocChat {
                     }
                 }
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
@@ -242,9 +254,50 @@ public class VetDocChat {
         });
     }
 
-    public static void updateToken(String AppName, String Userid){
+    public static void updateToken(String AppName, String Userid) {
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("Tokens");
         Token token1 = new Token(FirebaseInstanceId.getInstance().getToken());
         reference.child(AppName).child(Userid).setValue(token1);
+    }
+
+    private static String messageSend(final String senderAppName, final String receiverAppName, final String msg, final String sender, final String receiver, String msgType) {
+        final boolean[] notify = {false};
+        notify[0] = true;
+        String UsersChatKey = "";
+        final String[] response = {""};
+        DatabaseReference chatReference = FirebaseDatabase.getInstance().getReference();
+        String messageID = chatReference.push().getKey();
+        HashMap<String, Object> hashMap = new HashMap<String, Object>();
+        hashMap.put("message", msg);
+        hashMap.put("sender", sender);
+        hashMap.put("receiver", receiver);
+        hashMap.put("timestamp", ServerValue.TIMESTAMP);
+        hashMap.put("messageID", messageID);
+        hashMap.put("type", msgType);
+        hashMap.put("MessageStatus", "sent");
+        HashMap<String, Object> chat_hashMap = new HashMap<String, Object>();
+        chat_hashMap.put("chat", "true");
+        chatReference.child("Chat").child(receiver).child(senderAppName).child(sender).updateChildren(chat_hashMap);
+        ArrayList TwoChattingUsersID = new ArrayList<>();
+        TwoChattingUsersID.add(sender);
+        TwoChattingUsersID.add(receiver);
+        Collections.sort(TwoChattingUsersID);
+        UsersChatKey = TwoChattingUsersID.get(0) + "_" + TwoChattingUsersID.get(1);
+        chatReference.child("Messages").child(senderAppName).child(UsersChatKey).child(messageID).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    response[0] = "success";
+                    if (notify[0]) {
+                        sendNotification(senderAppName, receiverAppName, sender, receiver, msg);
+                    }
+                    notify[0] = false;
+                } else {
+                    response[0] = task.getException().getMessage();
+                }
+            }
+        });
+
+        return response[0];
     }
 }
