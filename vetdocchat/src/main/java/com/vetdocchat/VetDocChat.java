@@ -101,16 +101,15 @@ public class VetDocChat {
         }
     }
 
-    public static void sendMessage(final String senderAppName, final String receiverAppName, final String msg, final String sender, final String receiver, String msgType, Uri fileUri) {
 
-        if ((msgType.equalsIgnoreCase("image")) || (msgType.equalsIgnoreCase("pdf")) || (msgType.equalsIgnoreCase("docx")))
-        {
-            uploadFile(senderAppName, receiverAppName, sender, receiver, msgType, fileUri);
-        }
-        else if (msgType.equalsIgnoreCase("Text"))
-        {
-            messageSend(senderAppName, receiverAppName, msg, sender, receiver, msgType);
-        }
+    public static void sendMessage(final String senderAppName, final String receiverAppName, final String sender, final String receiver, String msgType, Uri fileUri)
+    {
+        uploadFile(senderAppName, receiverAppName, sender, receiver, msgType, fileUri);
+    }
+
+    public static void sendMessage(final String senderAppName, final String receiverAppName, final String msg, final String sender, final String receiver, String msgType)
+    {
+        messageSend(senderAppName, receiverAppName, msg, sender, receiver, msgType);
     }
 
     public static void getMessage(Context ctx, final String AppName, final String personalEmail, final String chatUserEmail) {
