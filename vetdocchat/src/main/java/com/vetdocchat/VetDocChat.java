@@ -101,7 +101,7 @@ public class VetDocChat {
     }
 
 
-    public static void sendMessage(final String senderAppName, final String receiverAppName, final String sender, final String receiver, String msgType, Uri fileUri)
+    public static void sendMessage(final String senderAppName, final String receiverAppName, Uri fileUri, final String sender, final String receiver, String msgType)
     {
         uploadFile(senderAppName, receiverAppName, fileUri, sender, receiver, msgType);
     }
