@@ -45,12 +45,11 @@ public class VetDocChat {
     //static Context ctx;
 
 
-    public static void uploadFile(final String senderAppName, final String receiverAppName, final String type, final String sender, final String receiver, Uri fileUri) {
+    public static void uploadFile(final String senderAppName, final String receiverAppName, Uri fileUri, final String sender, final String receiver, final String type) {
 
         final Uri[] downloadUri = new Uri[1];
         StorageReference filePath = null;
         StorageTask uploadTask;
-
 
         if (fileUri != null) {
             //progressDialog.show();
@@ -104,7 +103,7 @@ public class VetDocChat {
 
     public static void sendMessage(final String senderAppName, final String receiverAppName, final String sender, final String receiver, String msgType, Uri fileUri)
     {
-        uploadFile(senderAppName, receiverAppName, sender, receiver, msgType, fileUri);
+        uploadFile(senderAppName, receiverAppName, fileUri, sender, receiver, msgType);
     }
 
     public static void sendMessage(final String senderAppName, final String receiverAppName, final String msg, final String sender, final String receiver, String msgType)
