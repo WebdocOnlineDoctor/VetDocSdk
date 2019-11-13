@@ -19,7 +19,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
-import com.google.gson.annotations.SerializedName;
 import com.vetdocchat.NotificationManager.APIService;
 import com.vetdocchat.NotificationManager.Client;
 import com.vetdocchat.NotificationManager.Data;
@@ -101,13 +100,11 @@ public class VetDocChat {
     }
 
 
-    public static void sendMessage(final String senderAppName, final String receiverAppName, Uri fileUri, final String sender, final String receiver, String msgType)
-    {
+    public static void sendMessage(final String senderAppName, final String receiverAppName, Uri fileUri, final String sender, final String receiver, String msgType) {
         uploadFile(senderAppName, receiverAppName, fileUri, sender, receiver, msgType);
     }
 
-    public static void sendMessage(final String senderAppName, final String receiverAppName, final String msg, final String sender, final String receiver, String msgType)
-    {
+    public static void sendMessage(final String senderAppName, final String receiverAppName, final String msg, final String sender, final String receiver, String msgType) {
         messageSend(senderAppName, receiverAppName, msg, sender, receiver, msgType);
     }
 
