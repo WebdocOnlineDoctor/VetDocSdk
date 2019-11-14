@@ -22,6 +22,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
+import com.vetdocchat.Models.ChatUserModel;
 import com.vetdocchat.NotificationManager.APIService;
 import com.vetdocchat.NotificationManager.Client;
 import com.vetdocchat.NotificationManager.Data;
@@ -341,5 +342,94 @@ public class VetDocChat {
                         }
                     }
                 });
+    }
+
+    public static void getChatUsersList(Context context, final String email, String appName){
+        final VetDocChatUsersInterface vetDocChatUsersInterface = (VetDocChatUsersInterface) context;
+        if(!(appName.equalsIgnoreCase("VetDoc")))
+        {
+            DatabaseReference chatUsersReference = FirebaseDatabase.getInstance().getReference().child("Users").child("VetDoc");
+            chatUsersReference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                    Global.ChatUsersList.clear();
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        ChatUserModel user = new ChatUserModel();
+
+                        user.setFirebaseEmail(snapshot.getKey());
+                        // Toast.makeText(UserDashboardActivity.this, snapshot.getKey(), Toast.LENGTH_SHORT).show();
+                        user.setName(snapshot.child("name").getValue().toString());
+                        user.setEmail(snapshot.child("email").getValue().toString());
+                        user.setStatus(snapshot.child("status").getValue().toString());
+                        user.setAppName("VetDoc");
+                        Global.ChatUsersList.add(user);
+                    }
+                    //DoctorsListFrag.doctorsListAdapter.notifyDataSetChanged();
+                    vetDocChatUsersInterface.ChatUsers(Global.ChatUsersList);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }
+        else
+        {
+            final DatabaseReference dbReference = FirebaseDatabase.getInstance().getReference();
+            dbReference.child("Chat").child(email.replace(".", "")).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    for (final DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        dbReference.child("Chat").child(email.replace(".", "")).child(snapshot.getKey()).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot1) {
+
+                                for (final DataSnapshot snapshot1 : dataSnapshot1.getChildren()) {
+                                    dbReference.child("Users").child(snapshot.getKey()).child(snapshot1.getKey()).addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                            ChatUserModel tempUser = new ChatUserModel();
+                                            tempUser.setStatus(dataSnapshot.child("status").getValue().toString());
+                                            tempUser.setName(dataSnapshot.child("username").getValue().toString());
+                                            tempUser.setAppName(snapshot.getKey());
+                                            tempUser.setFirebaseEmail(snapshot1.getKey());
+                                            Global.ChatUsersList.add(tempUser);
+                                       /*Toast.makeText(getActivity(), Global.chatUsersList.toString(), Toast.LENGTH_LONG).show();*/
+                                           /* if (ChatUsersListFrag.adapter != null) {
+                                                ChatUsersListFrag.adapter.notifyDataSetChanged();
+                                            }*/
+                                            //vetDocChatUsersInterface.ChatUsers(Global.ChatUsersList);
+
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                        }
+                                    });
+                                }
+
+                                vetDocChatUsersInterface.ChatUsers(Global.ChatUsersList);
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                            }
+                        });
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }
+
+
     }
 }
