@@ -7,6 +7,9 @@ import android.support.annotation.NonNull;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -98,7 +101,6 @@ public class VetDocChat {
 
         }
     }
-
 
     public static void sendMessage(final String senderAppName, final String receiverAppName, Uri fileUri, final String sender, final String receiver, String msgType) {
         uploadFile(senderAppName, receiverAppName, fileUri, sender, receiver, msgType);
@@ -294,5 +296,50 @@ public class VetDocChat {
         });
 
         return response[0];
+    }
+
+    public static void registerUserForChat(Context context, final String appName, final String name, final String email, final String password) {
+        final FirebaseAuth mAuth = com.google.firebase.auth.FirebaseAuth.getInstance();
+        final RegisterUserForChatInterface registerUserForChatInterface = (RegisterUserForChatInterface) context;
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            DatabaseReference firebaseDatabaseReference = FirebaseDatabase.getInstance().getReference("Users").child(appName).child(email);
+                            HashMap<String, String> hashMap = new HashMap<String, String>();
+                            hashMap.put("name", name);
+                            hashMap.put("email", email);
+                            hashMap.put("status", "online");
+
+                            firebaseDatabaseReference.setValue(hashMap)
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()) {
+
+                                                registerUserForChatInterface.RegisterUserResponse("success");
+                                            } else {
+                                                registerUserForChatInterface.RegisterUserResponse(task.getException().toString());
+                                            }
+                                        }
+                                    });
+                        } else if (task.getException() instanceof FirebaseAuthUserCollisionException) {
+                            mAuth.signInWithEmailAndPassword(email, password)
+                                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<AuthResult> task) {
+                                            if (task.isSuccessful()) {
+                                                registerUserForChatInterface.RegisterUserResponse("successfully login");
+                                            } else {
+                                                registerUserForChatInterface.RegisterUserResponse(task.getException().getMessage());
+                                            }
+                                        }
+                                    });
+                        } else {
+                            registerUserForChatInterface.RegisterUserResponse(task.getException().getMessage());
+                        }
+                    }
+                });
     }
 }

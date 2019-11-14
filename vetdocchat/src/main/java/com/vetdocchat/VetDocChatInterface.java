@@ -15,7 +15,4 @@ public interface VetDocChatInterface {
     public void onChangeUserStatusResponse(String status, String lastSeen);
 
     public void onMessageSentResponse(String Response);
-
-
-
 }
