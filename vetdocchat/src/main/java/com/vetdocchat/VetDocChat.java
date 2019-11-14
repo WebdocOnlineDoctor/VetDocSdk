@@ -401,7 +401,7 @@ public class VetDocChat {
                                            /* if (ChatUsersListFrag.adapter != null) {
                                                 ChatUsersListFrag.adapter.notifyDataSetChanged();
                                             }*/
-                                            //vetDocChatUsersInterface.ChatUsers(Global.ChatUsersList);
+                                            vetDocChatUsersInterface.ChatUsers(Global.ChatUsersList);
 
                                         }
 
@@ -411,9 +411,6 @@ public class VetDocChat {
                                         }
                                     });
                                 }
-
-                                vetDocChatUsersInterface.ChatUsers(Global.ChatUsersList);
-
                             }
 
                             @Override
