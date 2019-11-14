@@ -306,7 +306,7 @@ public class VetDocChat {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            DatabaseReference firebaseDatabaseReference = FirebaseDatabase.getInstance().getReference("Users").child(appName).child(email);
+                            DatabaseReference firebaseDatabaseReference = FirebaseDatabase.getInstance().getReference("Users").child(appName).child(email.replace(".", ""));
                             HashMap<String, String> hashMap = new HashMap<String, String>();
                             hashMap.put("name", name);
                             hashMap.put("email", email);
